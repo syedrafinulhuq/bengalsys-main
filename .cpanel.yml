@@ -1,17 +1,21 @@
 ---
 deployment:
   tasks:
+    # Enable Node.js 18 on cPanel
     - export NODE_VERSION=18
     - source /opt/cpanel/ea-nodejs18/enable
 
-    # Install dependencies
-    - npm ci --silent
+    # Go to the repository directory cPanel cloned
+    - cd /home/bengalsys/repositories/bnsys-main
 
-    # Build the Vite app
+    # Install dependencies
+    - npm ci --silent || npm install --silent
+
+    # Build Vite project
     - npm run build
 
-    # Clean public_html
+    # Clear existing public_html
     - rm -rf /home/bengalsys/public_html/*
 
-    # Deploy dist folder to public_html
+    # Copy the built files to public_html
     - cp -R dist/* /home/bengalsys/public_html/
